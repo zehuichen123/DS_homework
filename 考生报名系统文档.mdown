@@ -1,0 +1,163 @@
+# 考试报名系统  
+1.项目目的
+---
+2.项目功能
+---
+- 
+3.核心代码
+---
+- 考生信息的建立
+```c++
+System::System() {
+    cout<<"首先请建立考生信息系统"<<endl;
+    while(1){
+        cout<<"请输入考生人数：";
+        cin>>stuNum;
+        getchar();
+        if(stuNum<0){
+            cout<<"student number must > 0"<<endl;
+            continue;
+        }
+        else if(stuNum>0){
+            cout<<"请一次输入考生的考号，姓名，性别，年龄及报考类别！"<<endl;
+            Stu *ptr1,*ptr2;
+            ptr1=new Stu;
+            Head=ptr1;
+            getInfo(ptr1);
+            for(int i=0;i<stuNum-1;i++){
+                ptr2=new Stu;
+                getInfo(ptr2);
+                ptr1->next=ptr2;
+                ptr2->former=ptr1;
+                ptr1=ptr2;
+            }
+        }
+        else{
+        }
+        break;
+    }
+    Display();
+}
+```
+- 考生信息的插入
+```c++
+void System::Insert() {
+    int Pos;
+    while(1){
+        cout<<"请输入你要插入的位置：";
+        cin>>Pos;
+        getchar();
+        if(Pos<=0||Pos>stuNum+1){
+            cerr<<"can not insert at"<<Pos<<endl;
+            continue;
+        }
+        else{
+            cout<<"请依次输入要插入的考生的考号，性别，年龄及报考类别:";
+            auto ptr1=new Stu;
+            getInfo(ptr1);
+            if(Pos==1){
+                if(stuNum){
+                    Head->former=ptr1;
+                    ptr1->next=Head;
+                    Head=ptr1;
+                }
+                else{
+                    Head=ptr1;
+                }
+            }
+            else if(Pos==stuNum+1){
+                auto position=FindByOrder(stuNum);
+                position->next=ptr1;
+                ptr1->former=position;
+            }
+            else{
+                auto position=FindByOrder(Pos);
+                auto temp=position->former;
+                temp->next=ptr1;
+                ptr1->former=temp;
+                position->former=ptr1;
+                ptr1->next=position;
+            }
+            stuNum++;
+        }
+        break;
+    }
+    Display();
+    return;
+}
+```
+- 考生信息的删除  
+```c++
+void System::Del() {
+    string stuNumber;
+    cout<<"请输入要删除的考生的考号: ";
+    cin>>stuNumber;
+    auto position=FindByNum(stuNumber);
+    if(position){
+        cout<<"你要删除的考生信息是：";
+        cout<<position->number<<"      "<<position->name<<"      "
+            <<position->sex<<"      "<<position->age<<"      "
+            <<position->catagery<<endl;
+        if(position==Head){
+            auto posNext=position->next;
+            posNext->former=NULL;
+            Head=posNext;
+            delete position;
+        }
+        else{
+            auto posFormer=position->former;
+            auto posNext=position->next;
+            if(posNext){
+                posFormer->next=posNext;
+                posNext->former=posFormer;
+            }
+            else{
+                posFormer->next=NULL;
+            }
+        }
+        stuNum--;
+    }
+    else{
+        cerr<<"can not find this student"<<endl;
+    }
+    Display();
+    return;
+}
+```
+- 考生信息的修改
+```c++
+void System::Modify() {
+    string stuNumber;
+    cout<<"请输入你要修改的考生考号:";
+    cin>>stuNumber;
+    getchar();
+    auto position=FindByNum(stuNumber);
+    if(position){
+        cout<<"请依次输入要插入的考生的考号，性别，年龄及报考类别:";
+        getInfo(position);
+    }
+    else{
+        cerr<<"can not find this student"<<endl;
+    }
+    return;
+}
+```
+- 考生信息的查找
+```c++
+Stu* System::FindByNum(string stuNumber) {
+    auto ptr=Head;
+    int count=stuNum;
+    while(count--){
+        cout<<stuNumber<<endl;
+        if(ptr->number==stuNumber){
+            return ptr;
+        }
+        else{
+            ptr=ptr->next;
+        }
+    }
+    return NULL;
+}
+```
+4.项目代码演示
+---
