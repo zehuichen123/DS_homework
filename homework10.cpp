@@ -166,8 +166,8 @@ int* mySystem::simSelSort(int Nums[],int length){
     end=clock();
     free(temp);
     double duration= (double)(end - start) / CLOCKS_PER_SEC;
-    cout<<"简单插入排序所用时间："<<duration<<endl;
-    cout<<"简单插入排序交换次数："<<Count<<endl;
+    cout<<"选择排序所用时间："<<duration<<endl;
+    cout<<"选择排序交换次数："<<Count<<endl;
     Count=0;
     return answer;
 }
@@ -295,7 +295,6 @@ void mySystem::quickSort(int answer[],int low,int high){
     Count=0;
 }
 void mySystem::_Merge(int Nums[],int start,int middle,int end){
-
     if(end-start<=0){
         return;
     }
