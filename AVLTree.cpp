@@ -154,7 +154,6 @@ Node* AVLTree::Delete(Node *root, int value) {
         root=Balance(root);
     }
     else{
-        cout<<"fffff"<<endl;
         if(root->right&&root->left){
             if(Diff(root)>0){
                 auto biggest=getMax(root->left);
@@ -170,7 +169,6 @@ Node* AVLTree::Delete(Node *root, int value) {
         else{
             auto temp=root;
             root=root->right?root->right:root->left;
-            cout<<"ff"<<endl;
             delete(temp);
         }
     }
