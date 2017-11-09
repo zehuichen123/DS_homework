@@ -4,35 +4,31 @@ int stuNum;
 class Stu{
 public:
     Stu();
-    ~Stu();
+    ~Stu(){};
 public:
-    string number;
-    string name;
-    string sex;
-    int age;
-    string catagery;
-    Stu* next;
-    Stu* former;
+    string number;                      //考生学号
+    string name;                        //考生姓名
+    string sex;                         //性别
+    int age;                            //年龄
+    string catagery;                    //职业
+    Stu* next;                          //指向下一个考生
+    Stu* former;                        //指向前一个考生
 };
 Stu::Stu():next(NULL),former(NULL){
-}
-Stu::~Stu(){
-    next=NULL;
-    former=NULL;
 }
 
 class System{
 public:
     System();
     ~System();
-    void Display();
-    void Insert();
-    void Find();
-    void Modify();
-    Stu* FindByOrder(int Pos);
-    Stu* FindByNum(string stuNumber);
-    void Del();
-    void getInfo(Stu* obj);
+    void Display();                     //显示所有考生信息
+    void Insert();                      //插入考生信息
+    void Find();                      
+    void Modify();                      //修改考生信息
+    Stu* FindByOrder(int Pos);          //按照考生顺序寻找考生
+    Stu* FindByNum(string stuNumber);   //按照考生学号寻找考生
+    void Del();                         //删除考生  
+    void getInfo(Stu* obj);             //获得考生信息
 private:
     int stuNum;
     Stu* Head;
@@ -60,16 +56,14 @@ System::System() {
             Stu *ptr1,*ptr2;
             ptr1=new Stu;
             Head=ptr1;
-            getInfo(ptr1);
-            for(int i=0;i<stuNum-1;i++){
+            getInfo(ptr1);                          //从stdin读入一位考生信息
+            for(int i=0;i<stuNum-1;i++){            //读入剩下stuNum-1位考生信息
                 ptr2=new Stu;
                 getInfo(ptr2);
-                ptr1->next=ptr2;
+                ptr1->next=ptr2;                    
                 ptr2->former=ptr1;
                 ptr1=ptr2;
             }
-        }
-        else{
         }
         break;
     }
@@ -95,13 +89,13 @@ void System::Display(){
     }
 }
 Stu* System::FindByOrder(int Pos) {
-    if(Pos>stuNum||Pos<=0){
+    if(Pos>stuNum||Pos<=0){                 //当找不到时返回NULL
         return NULL;
     }
     auto ptr=Head;
     Pos--;
-    while(Pos--){
-        ptr=ptr->next;
+    while(Pos--){                           //找到第pos位考生并返回指向
+        ptr=ptr->next;                      //该位考生的指针
     }
     return ptr;
 }
@@ -109,15 +103,15 @@ Stu* System::FindByNum(string stuNumber) {
     auto ptr=Head;
     int count=stuNum;
     while(count--){
-        cout<<stuNumber<<endl;
+        //cout<<stuNumber<<endl;
         if(ptr->number==stuNumber){
-            return ptr;
+            return ptr;                     //如果找到该位考生返回指向他的指针
         }
         else{
             ptr=ptr->next;
         }
     }
-    return NULL;
+    return NULL;                            //如果没有找到则返回NULL
 }
 void System::Insert() {
     int Pos;
@@ -125,7 +119,7 @@ void System::Insert() {
         cout<<"请输入你要插入的位置：";
         cin>>Pos;
         getchar();
-        if(Pos<=0||Pos>stuNum+1){
+        if(Pos<=0||Pos>stuNum+1){           //如果插入的位置不存在就报错重新输入
             cerr<<"can not insert at"<<Pos<<endl;
             continue;
         }
@@ -133,7 +127,7 @@ void System::Insert() {
             cout<<"请依次输入要插入的考生的考号，性别，年龄及报考类别:";
             auto ptr1=new Stu;
             getInfo(ptr1);
-            if(Pos==1){
+            if(Pos==1){                     //插入的位置在首位
                 if(stuNum){
                     Head->former=ptr1;
                     ptr1->next=Head;
@@ -143,12 +137,12 @@ void System::Insert() {
                     Head=ptr1;
                 }
             }
-            else if(Pos==stuNum+1){
+            else if(Pos==stuNum+1){         //插入的位置在末尾
                 auto position=FindByOrder(stuNum);
                 position->next=ptr1;
                 ptr1->former=position;
             }
-            else{
+            else{                           //插入的位置在中间
                 auto position=FindByOrder(Pos);
                 auto temp=position->former;
                 temp->next=ptr1;
@@ -168,19 +162,19 @@ void System::Del() {
     string stuNumber;
     cout<<"请输入要删除的考生的考号: ";
     cin>>stuNumber;
-    auto position=FindByNum(stuNumber);
-    if(position){
+    auto position=FindByNum(stuNumber);     //寻找该位置的考生
+    if(position){                           //如果找到该位考生就执行删除操作
         cout<<"你要删除的考生信息是：";
         cout<<position->number<<"      "<<position->name<<"      "
             <<position->sex<<"      "<<position->age<<"      "
             <<position->catagery<<endl;
-        if(position==Head){
+        if(position==Head){                 //如果删除的考生在首位
             auto posNext=position->next;
             posNext->former=NULL;
             Head=posNext;
             delete position;
         }
-        else{
+        else{                               //如果删除的考生不在首位
             auto posFormer=position->former;
             auto posNext=position->next;
             if(posNext){
@@ -196,7 +190,7 @@ void System::Del() {
     else{
         cerr<<"can not find this student"<<endl;
     }
-    Display();
+    Display();                              //显示删除后所有考生信息
     return;
 }
 void System::Find(){

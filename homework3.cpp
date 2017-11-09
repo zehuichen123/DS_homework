@@ -58,12 +58,10 @@ void dfs(){
 }
 int main(void){
     cout<<"输入1为自带地图，输入2为自定义地图"<<endl;
-
     int PointX=0,PointY=0;
     auto ptr=new point;
     ptr->x=PointX;
     ptr->y=PointY;
     answer.push_back(*ptr);
     dfs();
-
 }
