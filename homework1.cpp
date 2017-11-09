@@ -23,7 +23,7 @@ public:
     ~System();
     void Display();                     //显示所有考生信息
     void Insert();                      //插入考生信息
-    void Find();                      
+    void Find();                        //查找考生是否存在
     void Modify();                      //修改考生信息
     Stu* FindByOrder(int Pos);          //按照考生顺序寻找考生
     Stu* FindByNum(string stuNumber);   //按照考生学号寻找考生
@@ -124,7 +124,7 @@ void System::Insert() {
             continue;
         }
         else{
-            cout<<"请依次输入要插入的考生的考号，性别，年龄及报考类别:";
+            cout<<"请依次输入要插入的考生的考号，性别，年龄及报考类别:"<<endl;
             auto ptr1=new Stu;
             getInfo(ptr1);
             if(Pos==1){                     //插入的位置在首位
