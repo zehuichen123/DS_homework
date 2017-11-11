@@ -1,0 +1,131 @@
+# 单词检索统计系统
+1.项目简介
+---
+给定一个文本文件，要求统计给定单词在文本中出现的总次数，并检索输出某个单词出现在文本中的行号、在该行中出现的次数以及位置。
+2.项目功能要求
+---
+本项目的设计要求可以分为三个部分实现：其一，建立一个文本文件，文件名由用户用键盘输入；其二，给定单词计数，输入一个不含空格的单词，统计输出该单词在文本中的出现次数；其三，检索给定单词，输入一个单词，检索并输出该单词所在的行号、该行中出现的次数以及在该行中的相应位置。
+3.核心代码及其功能
+---
+- **对给定单词进行计数**
+这里我们采用ifstream的方式来读入文件，声明一个ifstream变量`openFile`，然后每次从openFile读入一个单词记录在temp的string中，如果该string等于我们之前输入的word就将计数器加一，直到读到文件末尾处。
+```c++
+void Count(){
+    int countNum=0;
+    cout<<"please input the word you want to count:";
+    string word;                 	//保存输入的单词
+    cin>>word;
+    string temp;                 //保存从文本中每次读入的单词
+    while(openFile>>temp){
+        if(temp==word){          //每次出现一次就将计数器加1
+            countNum++;
+        }
+    }
+    cout<<"该单词出现了"<<countNum<<"次"<<endl;
+}
+```
+- **搜索给定的单词**
+首先将要搜索的单词保存至word变量中，这里我们采用每次用getline读取一行内容，然后再对在该行进行查找单词。lineNum为目前的行数，pos为在该行查找到的位置，使用了string的内置函数find查找单词,并且需要考虑到使用find函数仅查找子串可能找到一个包含该单词的单词，所以需要添加条件找到的单词后面的一个字符必须是' '或者'\n'。
+```c++
+void Find(){
+    cout<<"please input the word you want to count:";
+    string word;                 //保存想要搜索的单词
+    cin>>word;
+    int lineNum=1,pos=0;
+    string line;
+    while(getline(openFile,line)){      //每次读入一行
+        while((pos=line.find(word,pos))!=string::npos
+            &&(line[pos+word.size()]==' '||line[pos+word.size()]=='\n')){     
+                                                            //在每一行中重复寻找是否存在该单词
+                                                            //pos代表当前行寻找到的位置
+            cout<<"find word "<<'\''<<word<<'\''<<" at line "<<lineNum<<",column "<<pos<<endl;
+            pos+=word.size();
+        }
+        lineNum++;
+        pos=0;                          //将每一行寻找到的位置重置为0                  
+    }
+}
+```
+- **读入失败时重新询问用户输入**
+这里同样考虑了用户输入了非法输入或者未打开文件时重新询问用户的操作：
+```c++
+bool checkOption(){              //询问用户是否想重新输入
+    cout<<"Do you want to reinput?(y/n)"<<endl;
+    char option;
+    cin>>option;
+    if(option=='y'){
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+```
+4.项目实例
+---
+- **a.txt文件**
+```
+abc abc abc abc
+fjl fljfe jfleijf eflfejlfe l felfjj fel efjeljfjf
+ejlfilj elfjelfj abcf ljflefjlsfj lef slfj
+abc iejf abc fjeiljf ajlfj
+```
+- **打开文件失败**
+```
+/Users/kirito/CLionProjects/untitled/cmake-build-debug/untitled
+please input the name of file you want to open
+b.txt
+can not find/open this file
+Do you want to reinput?(y/n)
+y
+please input the name of file you want to open
+
+```
+- **对给定单词计数**
+```
+please input the name of file you want to open
+a.txt
+------------------------
+选项1：对给定单词计数
+选项2：检索给定单词
+选项3：退出程序
+请输入你的选择:1
+please input the word you want to count:abc
+该单词出现了6次
+------------------------
+```
+- **寻找给定单词**
+选项1：对给定单词计数
+选项2：检索给定单词
+选项3：退出程序
+请输入你的选择:2
+please input the word you want to count:abc
+find word 'abc' at line 1,column 0
+find word 'abc' at line 1,column 4
+find word 'abc' at line 1,column 8
+find word 'abc' at line 4,column 0
+find word 'abc' at line 4,column 9
+------------------------
+```
+- **结束程序**
+```
+------------------------
+选项1：对给定单词计数
+选项2：检索给定单词
+选项3：退出程序
+请输入你的选择:3
+
+Process finished with exit code 0
+```
+
+
+
+
+
+
+
+
+
+
+
+
