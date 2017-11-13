@@ -10,7 +10,7 @@
 
 3.核心代码及其功能
 ---
-- **声明的数据类**
+- **声明的数据类**  
  - person：用于作为单个节点
  ```c++
  class person{                           //用于保存一个人的信息
@@ -53,7 +53,7 @@
      person* head;
  };
  ```
-- **创建家谱**
+- **创建家谱**  
 这里将创建家谱的过程放在了multiTree的构造函数中，首先接受一个头节点作为整个多叉树的祖先。
 ```c++
 multiTree::multiTree() {                    //构造家谱（即构造多叉树）
@@ -74,7 +74,7 @@ multiTree::multiTree() {                    //构造家谱（即构造多叉树�
     head=ptr;
 }
 ```
-- **寻找姓名为searchName的家庭成员**
+- **寻找姓名为searchName的家庭成员**  
 因为在整个系统中平频繁的使用到了寻找某位家庭成员是否存在的功能，所以这里将这一过程抽象为findName函数，其中ptr代表当前的根节点，searchName代表要寻找的家庭成员的姓名，这里采用了递归搜索的方式，也就是如果当前节点的子节点中没有该姓名的成员孩子那么就进入该成员的子节点中进行查找，直到找到或者查找完所有可查找节点为止。返回值为指向名字为searchName节点的指针，如果没有找到返回NULL。
 ```c++
 person* multiTree::findName(person* ptr,string searchName){
@@ -94,7 +94,7 @@ person* multiTree::findName(person* ptr,string searchName){
     return NULL;
 }
 ```
-- **完善家谱功能**
+- **完善家谱功能**  
 首先调用searchName函数寻找名字为想要寻找的家庭成员，如果没有找到就输出没有找到信息，返回。如果找到就询问其子女人数（检测是否大于0）。这里由于输入的姓名都是按照字符串形式进行读入，所以采用了getline函数遇到‘ ’停止读，但这里需要将最后一个姓名独立出来，因为它的后一个字符为'\0'而不是' '。
 ```c++
 void multiTree::Create() {
@@ -134,7 +134,7 @@ void multiTree::Create() {
     }
 }
 ```
-- **删除节点**
+- **删除节点**  
 这里首先抽象出一个删除节点的函数，这里采用了递归删除的方式，不断递归寻找其子节点并delete。start指针指向当前遍历到的节点。
 ```c++
 void multiTree::deleteChild(person *start) {    //递归删除家庭成员从而删除其所有孩子节点
@@ -149,7 +149,7 @@ void multiTree::deleteChild(person *start) {    //递归删除家庭成员从而
     }
 }
 ```
-- **解散家庭功能**
+- **解散家庭功能**  
 先调用finName函数找到名字为searchName的家庭成员，然后调用deleteChild删除该成员的所有子节点。
 ```c++
 void multiTree::Delete() {
@@ -167,7 +167,7 @@ void multiTree::Delete() {
     }
 }
 ```
-- **修改成员信息功能**
+- **修改成员信息功能**  
 先调用findName函数找到名字为searchName的家庭成员，然后修改信息
 ```c++
 void multiTree::Modify(){
@@ -187,7 +187,7 @@ void multiTree::Modify(){
     }
 }
 ```
-- **添加家庭成员功能**
+- **添加家庭成员功能**  
 先调用findName函数找到名字为searchName的家庭成员，然后将其孩子作为节点push到保存该节点子节点的vector中
 ```c++
 void multiTree::Add() {

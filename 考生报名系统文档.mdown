@@ -5,7 +5,7 @@
 
 2.核心代码及功能介绍
 ---
-- 定义的类
+- **定义的类**  
  - Stu(储存一位考生的信息单元)
  ```c++
  class Stu{
@@ -42,7 +42,7 @@
  }; 
  ```
  
-- 考生信息的建立
+- **考生信息的建立**  
 这里我们将读入考生信息抽象成getInfo函数从而达到减少代码，使项目操作清晰的目的，同时加入的简单的错误处理机制。
 ```c++
 System::System() {
@@ -74,7 +74,7 @@ System::System() {
     Display();
 }
 ```
-- 考生信息的插入
+- **考生信息的插入**  
 对于这个部分需要区分三种情况，插入的考生的位置在首位，中间和末尾，从而采用三种不同的插入操作
 ```c++
 void System::Insert() {
@@ -122,7 +122,7 @@ void System::Insert() {
     return;
 }
 ```
-- 考生信息的删除  
+- **考生信息的删除**  
 这里要考虑如果为找到该位考生要做特殊处理，其他删除的时候也要分两种情况，一种为在首位，另一种为不在首位。
 ```c++
 void System::Del() {
@@ -161,7 +161,7 @@ void System::Del() {
     return;
 }
 ```
-- 考生信息的修改
+- **考生信息的修改**  
 ```c++
 void System::Modify() {
     string stuNumber;
@@ -179,7 +179,7 @@ void System::Modify() {
     return;
 }
 ```
-- 考生信息的查找
+- **考生信息的查找**  
 ```c++
 void System::Find(){
     string stuNumber;
@@ -198,7 +198,7 @@ void System::Find(){
     return;
 }
 ```
-- 两个抽象出来的函数`findByNum`&`findByOrder`
+- **两个抽象出来的函数`findByNum`&`findByOrder`**  
 由于在整个程序中需要用到大量的按照考生考号和考生位置查找，所以我特地抽象出两个查找函数，findByNum按照考生考号的查找，返回指向该位考生的指针，如果没有找到就返回NULL，findByOrder按照考生在整个储存链表里的位置查找，返回指向指向该位置考生的指针，如果没有找到返回NULL
 ```c++
 Stu* System::FindByOrder(int Pos) {
@@ -227,7 +227,7 @@ Stu* System::FindByNum(string stuNumber) {
     return NULL;                            //如果没有找到则返回NULL
 }
 ```
-- 考生信息的统计
+- **考生信息的统计**  
 在这里默认展示所有的考生信息
 ```c++
 void System::Display(){
