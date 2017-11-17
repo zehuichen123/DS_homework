@@ -66,14 +66,14 @@ bool checkOption(){              //询问用户是否想重新输入
 4.项目实例
 ---
 - **a.txt文件**
-```
+```c++
 abc abc abc abc
 fjl fljfe jfleijf eflfejlfe l felfjj fel efjeljfjf
 ejlfilj elfjelfj abcf ljflefjlsfj lef slfj
 abc iejf abc fjeiljf ajlfj
 ```
 - **打开文件失败**
-```
+```c++
 /Users/kirito/CLionProjects/untitled/cmake-build-debug/untitled
 please input the name of file you want to open
 b.txt
@@ -84,7 +84,7 @@ please input the name of file you want to open
 
 ```
 - **对给定单词计数**
-```
+```c++
 please input the name of file you want to open
 a.txt
 ------------------------
@@ -97,6 +97,7 @@ please input the word you want to count:abc
 ------------------------
 ```
 - **寻找给定单词**
+```c++
 选项1：对给定单词计数
 选项2：检索给定单词
 选项3：退出程序
@@ -110,7 +111,7 @@ find word 'abc' at line 4,column 9
 ------------------------
 ```
 - **结束程序**
-```
+```c++
 ------------------------
 选项1：对给定单词计数
 选项2：检索给定单词
