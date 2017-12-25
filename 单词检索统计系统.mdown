@@ -9,6 +9,75 @@
 
 3.核心代码及其功能
 ---
+- **新建文本并输入文本信息**  
+这里我们使用`ofstream`类来新建一个文本文件，然后每次先将要输入的一行字符放入string中，然后再输入到文本中，最后关闭文本。
+```c++
+void Create(){
+    string fileName;
+    cout << "请输入要新建的文件名：";
+    cin >> fileName;
+    ofstream fout(fileName);            //创建待写入数据文件
+    bool goOn = 1;
+    while (goOn) {
+        cout<<"请输入一行文本:";
+        getchar();
+        string line;
+        char yOrn;
+        getline(cin,line);
+        fout << line+'\n';
+        cout << "结束输入吗？y or n:";
+        cin >> yOrn;
+        if (yOrn == 'y') {
+            break;
+        }
+    }
+    fout.close();
+}
+```
+- **切分单词**  
+由于在读入文本的时候每次是读入一行，所以需要根据‘ ’也就是space来切分一行string，python里提供了split函数，但是由于c++没有提供这个函数，所以我手写了一个切分的函数。返回一个保存切分出来的单词的vector，以参数c为切分标准，切分string s。
+```c++
+void splitString(const string& s, vector<string>& v,char c){
+    size_type pos1, pos2;                   
+    pos2 = s.find(c);                   //找到c出现的位置
+    pos1 = 0;
+    while(string::npos != pos2)         //如果没有找到string的末尾则继续寻找
+    {
+        v.push_back(s.substr(pos1, pos2-pos1));     //将遇到space之前的字符作为一个单词放入vector中
+        pos1 = pos2 + 1;                            //从下一个位置开始继续寻找c出现的位置
+        pos2 = s.find(c, pos1);
+    }
+    if(pos1 != s.length())                          //将最后一段字符作为一个单词放入vector中
+        v.push_back(s.substr(pos1));
+}
+```
+- **文本单词汇总**  
+每次读入一行单词，然后调用splitString函数将该行按照空格切分成单词，然后对每个单词使用map进行统计，最后遍历整个map输入统计的效果。这里需要对切分后的单词进行检查单词末尾是否带有'.'，如果有则需要将其去除。
+```c++
+void Summary(string fileName){
+    fileSum.clear();            //将map清空
+    int wordCount=0;            //统计所有单词量
+    string line;                //每次读入一行句子
+    string word;                //存放每行切分的所有单词
+    while(getline(openFile,line)){
+        vector<string>word;
+        splitString(line,word,' ');
+        wordCount+=word.size();
+        for(auto i:word){           //如果单词的末尾是'.'就将其去除
+            if(i[i.size()-1]=='.'){
+                i.erase(i.end()-1);
+            }
+            fileSum[i]++;           //使用map统计总单词量
+        }
+    }
+    cout<<"*******单词计数*********"<<endl;
+    cout<<"单词        次数"<<endl;
+    for(auto i:fileSum){
+        cout<<i.first<<"       "<<i.second<<endl;
+    }
+    cout<<fileName<<"的单词总数为"<<wordCount<<endl;
+}
+```
 - **对给定单词进行计数**  
 这里我们采用ifstream的方式来读入文件，声明一个ifstream变量`openFile`，然后每次从openFile读入一个单词记录在temp的string中，如果该string等于我们之前输入的word就将计数器加一，直到读到文件末尾处。
 ```c++
@@ -65,70 +134,113 @@ bool checkOption(){              //询问用户是否想重新输入
 ```
 4.项目实例
 ---
-- **a.txt文件**
-```c++
-abc abc abc abc
-fjl fljfe jfleijf eflfejlfe l felfjj fel efjeljfjf
-ejlfilj elfjelfj abcf ljflefjlsfj lef slfj
-abc iejf abc fjeiljf ajlfj
-```
-- **打开文件失败**
+> a.txt内容  
+this is a boy and he is a good boy  
+you are a student
+
+
+- **建立文本文档**
 ```c++
 /Users/kirito/CLionProjects/untitled/cmake-build-debug/untitled
-please input the name of file you want to open
-b.txt
+**************************************
+********文本文件单词的检索与计数**********
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):1
+请输入要新建的文件名：b.txt
+请输入一行文本:you are a good boy.
+结束输入吗？y or n:n
+请输入一行文本:he is a good student.
+结束输入吗？y or n:y
+```
+- **打开文件失败重新询问用户输入**
+```c++
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):2
+请输入要打开的文件名：c.txt
 can not find/open this file
 Do you want to reinput?(y/n)
 y
-please input the name of file you want to open
-
 ```
-- **对给定单词计数**
+- **文本单词汇总**
 ```c++
-please input the name of file you want to open
-a.txt
-------------------------
-选项1：对给定单词计数
-选项2：检索给定单词
-选项3：退出程序
-请输入你的选择:1
-please input the word you want to count:abc
-该单词出现了6次
-------------------------
+请输入要打开的文件名：a.txt
+*******单词计数*********
+单词        次数
+a       3
+and       1
+are       1
+boy       2
+good       1
+he       1
+is       2
+student       1
+this       1
+you       1
+a.txt的单词总数为14
 ```
-- **寻找给定单词**
+- **单词定位之单词出现次数统计**
 ```c++
-选项1：对给定单词计数
-选项2：检索给定单词
-选项3：退出程序
-请输入你的选择:2
-please input the word you want to count:abc
-find word 'abc' at line 1,column 0
-find word 'abc' at line 1,column 4
-find word 'abc' at line 1,column 8
-find word 'abc' at line 4,column 0
-find word 'abc' at line 4,column 9
-------------------------
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):3
+请输入要打开的文件名：a.txt
+文本文件单词的定位统计及定位
+a.单词出现次数
+b.单词出现位置
+请输入a或b:a
+please input the word you want to count:good
+该单词出现了1次
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):3
+请输入要打开的文件名：b.txt
+文本文件单词的定位统计及定位
+a.单词出现次数
+b.单词出现位置
+请输入a或b:a
+please input the word you want to count:good
+该单词出现了2次
 ```
-- **结束程序**
+- **单词定位之单词出现位置**
 ```c++
-------------------------
-选项1：对给定单词计数
-选项2：检索给定单词
-选项3：退出程序
-请输入你的选择:3
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):3
+请输入要打开的文件名：b.txt
+文本文件单词的定位统计及定位
+a.单词出现次数
+b.单词出现位置
+请输入a或b:b
+please input the word you want to count:good
+find word 'good' at line 1,column 10
+find word 'good' at line 2,column 8
+```
+- **退出程序**
+```c++
+**************************************
+[1]建立文本文档
+[2]文本单词汇总
+[3]单词定位
+[4]退出
+请选择(1~4):4
 
 Process finished with exit code 0
+
 ```
-
-
-
-
-
-
-
-
-
-
-
-
